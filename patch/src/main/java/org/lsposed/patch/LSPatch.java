@@ -94,6 +94,9 @@ public class LSPatch {
     @Parameter(names = {"-m", "--embed"}, description = "Embed provided modules to apk")
     private List<String> modules = new ArrayList<>();
 
+    @Parameter(names = {"-hw","--patch_huawei"}, description = "Apply Huawei Health Device Patch")
+    private boolean patchHuawei = false;
+
     private static final String ANDROID_MANIFEST_XML = "AndroidManifest.xml";
     private static final HashSet<String> ARCHES = new HashSet<>(Arrays.asList(
             "armeabi-v7a",
@@ -349,6 +352,8 @@ public class LSPatch {
         // TODO: replace query_all with queries -> manager
         if (useManager)
             property.addUsesPermission("android.permission.QUERY_ALL_PACKAGES");
+        if (patchHuawei)
+            property.setPatchHuawei(true);
 
         var os = new ByteArrayOutputStream();
         (new ManifestEditor(is, os, property)).processManifest();
